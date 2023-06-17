@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\DTO\TaskDTO;
 use App\Enum\ProjectStatus;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -44,6 +45,17 @@ class Task
     public function __construct(Project $project)
     {
         $this->project = $project;
+    }
+
+    public static function createFromDTO($task, TaskDTO $dto): Task
+    {
+        $task->title = $dto->title;
+        $task->start = $dto->start;
+        $task->end = $dto->end;
+        $task->description = $dto->description;
+        $task->status = ProjectStatus::tryFrom($dto->status ?? 'new');
+
+        return $task;
     }
 
     public function getProject(): Project
