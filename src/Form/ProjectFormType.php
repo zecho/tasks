@@ -10,7 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class ProjectFormType extends AbstractType
 {
@@ -44,5 +46,10 @@ class ProjectFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Project::class,
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'project';
     }
 }
