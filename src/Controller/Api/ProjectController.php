@@ -104,11 +104,14 @@ class ProjectController extends AbstractController
     #[Route('/{id}', name: 'api_project_delete', methods: ['DELETE'])]
     public function delete(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
+        try {
             $entityManager->remove($project);
             $entityManager->flush();
+        } catch (\Exception $e) {
+            //TODO: Error handling
+            throw $e;
         }
 
-        return $this->redirectToRoute('api_project_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(null, 204);
     }
 }

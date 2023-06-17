@@ -6,10 +6,12 @@ namespace App\Entity;
 use App\DTO\ProjectDTO;
 use App\Enum\ProjectStatus;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[
     ORM\Entity,
-    ORM\Table(name: 'project')
+    ORM\Table(name: 'project'),
+    Gedmo\SoftDeleteable()
 ]
 class Project
 {
@@ -40,6 +42,9 @@ class Project
 
     #[ORM\Column(name: 'company', type: 'string', nullable: true)]
     private ?string $company = null;
+
+    #[ORM\Column(name: 'deleted_at', type: 'datetimetz_immutable', nullable: true)]
+    private ?\DateTimeInterface $deletedAt = null;
 
     public static function createFromDTO(ProjectDTO $dto): Project
     {
@@ -133,5 +138,15 @@ class Project
     public function getTarget(): string
     {
         return $this->client ?? $this->company ?? '';
+    }
+
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
     }
 }
