@@ -6,6 +6,8 @@ namespace App\Entity;
 use App\Enum\ProjectStatus;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[
     ORM\Entity,
@@ -21,12 +23,15 @@ class Project
     private int $id;
 
     #[ORM\Column(name: 'title', type: 'string', nullable: false)]
+    #[Assert\NotBlank()]
     private string $title;
 
     #[ORM\Column(name: 'description', type: 'string', nullable: false)]
+    #[Assert\NotBlank()]
     private string $description;
 
     #[ORM\Column(name: 'status', type: 'string', enumType: ProjectStatus::class)]
+    #[Assert\Valid()]
     private ProjectStatus $status = ProjectStatus::NEW;
 
     #[ORM\Column(name: 'start_at', type: 'datetimetz_immutable')]
@@ -114,5 +119,31 @@ class Project
     public function setCompany(string|null $company): void
     {
         $this->company = $company;
+    }
+
+    public function getTarget(): string
+    {
+        return $this->client ?? $this->company ?? '';
+    }
+
+    #[Assert\Callback()]
+    public function validateClientOrCompanySet(ExecutionContextInterface $context): void
+    {
+        if (!$this->getTarget()) {
+            $context
+                ->buildViolation('Client or Company should be set.')
+                ->addViolation();
+        }
+    }
+
+    #[Assert\Callback()]
+    public function validatePositiveDuration(ExecutionContextInterface $context): void
+    {
+        if ($this->start->diff($this->end)->invert) {
+            $context
+                ->buildViolation('Ending should be after start.')
+                ->atPath('end')
+                ->addViolation();
+        }
     }
 }
