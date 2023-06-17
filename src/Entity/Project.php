@@ -35,6 +35,12 @@ class Project
     #[ORM\Column(name: 'end_at', type: 'datetimetz_immutable')]
     private \DateTimeInterface $end;
 
+    #[ORM\Column(name: 'client', type: 'string', nullable: true)]
+    private ?string $client = null;
+
+    #[ORM\Column(name: 'company', type: 'string', nullable: true)]
+    private ?string $company = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -88,5 +94,25 @@ class Project
     public function setEnd(\DateTimeInterface $end): void
     {
         $this->end = $end;
+    }
+
+    public function getClient(): ?string
+    {
+        return $this->client;
+    }
+
+    public function setClient(string|null $client): void
+    {
+        $this->client = $client;
+    }
+
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+
+    public function setCompany(string|null $company): void
+    {
+        $this->company = $company;
     }
 }
