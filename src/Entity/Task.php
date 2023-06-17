@@ -41,6 +41,11 @@ class Task
     #[ORM\Column(name: 'end_at', type: 'datetimetz_immutable')]
     private \DateTimeInterface $end;
 
+    public function __construct(Project $project)
+    {
+        $this->project = $project;
+    }
+
     public function getProject(): Project
     {
         return $this->project;

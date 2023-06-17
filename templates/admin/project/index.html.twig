@@ -33,6 +33,7 @@
                 <td>
                     <a href="{{ path('admin_project_show', {'id': project.id}) }}">show</a>
                     <a href="{{ path('admin_project_edit', {'id': project.id}) }}">edit</a>
+                    <a href="{{ path('admin_task_index', {'project': project.id}) }}">Tasks</a>
                 </td>
             </tr>
         {% else %}

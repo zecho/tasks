@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task index{% endblock %}
+
+{% block body %}
+    <h1>Task index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.status.value }}</td>
+                <td>{{ task.start ? task.start|date('Y-m-d H:i:s T') : '' }}</td>
+                <td>{{ task.end ? task.end|date('Y-m-d H:i:s T') : '' }}</td>
+                <td>
+                    <a href="{{ path('admin_task_edit', {project: project.id, 'id': task.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_task_new', {project: project.id}) }}">Create new</a>
+    <a href="{{ path('admin_project_show', {id: project.id}) }}">Back to project</a>
+{% endblock %}
